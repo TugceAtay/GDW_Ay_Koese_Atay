@@ -3,7 +3,6 @@ console.log("Übungsblatt 1");
 //maximal Höhe der Bewertung
 const maxHoehe = 100;
 
-
 let aktuell = 0;
 let eingabe=0;
 let gesamtAnzahl = 0;

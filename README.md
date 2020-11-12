@@ -2,6 +2,7 @@
 
 ## Termine
 
+- jeden Tag 18.00 Uhr zoom Meeting
 - Freitag 13.11.20, 14.00 Uhr: Besprechung des Projektthemas 
 - Bis zum 11.12.20 Anmeldung im PSSO
 - Do, 10.12.20: Meilenstein 1
