@@ -1,0 +1,40 @@
+0) POSTMAN Account zum testen erstellen.
+1) "server.js erstellen", um verbindung herzustellen.
+2) "app.js erstellen", um in der Datei alles auszuführen like "Controller".
+3) "api/routes Ordner erstellen", um in der Datei die Routen anzugeben und "Models" auszuführen.
+4) "api/models Ordner erstellen", um in der Datei die Funktionen zu schreiben.
+5) "nodemon.json" erstellen um Datenbank Passwort zu sichern.
+
+6) In "app.js": 'Logger, bodyParser, ErrorHandler, Routen, Security' einbinden
+7) In "Dateien der api ordner": 'GET, PATCH, DELETE, POST' Methoden einbinden.
+8) In "package.json": 'nodemon' einfügen und npm installieren.
+
+9) Datenbank per Mongoose einrichten und erstellen.
+10) In "app.js": Connect einbinden.
+
+121 JWT eingebunden.
+
+
+Bedeutung:
+*body-parser*
+Um HTTP-POST-Daten lesen zu können, müssen wir das Knotenmodul "body-parser" verwenden.
+body-parser ist eine Express-Middleware, die die Eingabe eines Formulars liest und als
+Javascript-Objekt speichert, auf das über req.body
+
+*Middleware*
+https://expressjs.com/de/guide/using-middleware.html
+https://www.cloudcomputing-insider.de/was-ist-middleware-a-611085/
+
+*CORS*
+https://developer.mozilla.org/de/docs/Web/HTTP/CORS
+
+*JWT*
+Ein Security-Token (einfach: Token) ist eine Hardwarekomponente zur Identifizierung und Authentifizierung von Benutzern.
+Gelegentlich werden damit auch Softwaretoken bezeichnet.
+Sie sind meist Bestandteil eines Systems der Zugriffskontrolle mit Zwei-Faktor-Authentisierung.
+
+*REST API*
+https://www.datacenter-insider.de/was-ist-rest-api-a-714434/
+
+INFO:
+- IMG Upload und JWT Auth Token kontrolle nicht umgesetzt.
