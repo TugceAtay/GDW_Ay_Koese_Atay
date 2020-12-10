@@ -10,7 +10,13 @@
 
 ## Erledigte Aufgaben:
 
-- Projektthema
-- Bspl. Domänenmodell
-- Aufgabenblatt 1 
+- Projektthema/ Expose 
+- Domänenmodell/ Wireframe
+- Aufgabenblatt 1 u. Aufgabenblatt2 
+- Erstellung bzw. Umsetzung von RestApi. 
+- Recherchen von extern Apis => Umsetzung von extern Apis mit Code. 
+- Umsetzung von Ressourchen. 
+- Umsetzung der Anwendungslogik. 
+- Umsetzung der Datenstruktur bzw. Schema mit mongoose => Node.js Code. 
+- Pflege von Wiki. 
 
