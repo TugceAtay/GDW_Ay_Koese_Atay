@@ -13,9 +13,10 @@
 - Projektthema/ Expose 
 - Domänenmodell/ Wireframe
 - Aufgabenblatt 1 u. Aufgabenblatt2 
-- Erstellung bzw. Umsetzung von RestApi. 
+- Erstellung bzw. Umsetzung von RestApi => Node.js Code. 
 - Recherchen von extern Apis => Umsetzung von extern Apis mit Code. 
 - Umsetzung von Ressourchen. 
+- Umsetzung von Rest Modell. 
 - Umsetzung der Anwendungslogik. 
 - Umsetzung der Datenstruktur bzw. Schema mit mongoose => Node.js Code. 
 - Pflege von Wiki. 
