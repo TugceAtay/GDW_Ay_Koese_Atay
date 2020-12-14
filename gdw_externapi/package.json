@@ -1,0 +1,25 @@
+{
+  "name": "gdw-external-api-aufruf",
+  "version": "1.0.0",
+  "description": "Basis js für einen externen api aufruf",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "keywords": [
+    "nodejs",
+    "api",
+    "call",
+    "rest",
+    "martand",
+    "singh",
+    "node",
+    "web",
+    "api"
+  ],
+  "author": "Burak, Ilyas, Tugce",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.88.2"
+  }
+}
