@@ -1,23 +1,22 @@
 const mongoose = require('mongoose');
 
 // Schema - Tabelle.
-const Lernstoff = require('../models/lernstoff');
+const Testergebnis = require('../models/testergebnis');
 
-exports.lernstoff_get_all = (req, res, next) => {
-    Lernstoff
+exports.testergebnis_get_all = (req, res, next) => {
+    Testergebnis
         .find()
-        .select('_id fachid klassenid thema schuleid')
+        .select('_id fehler korrekt testid')
         .exec()
         .then(docs => {
             res.status(200).json({
                 Anzahl: docs.length,
-                Lernstoff: docs.map(doc => {
+                Testergebnis: docs.map(doc => {
                     return {
                         _id: doc._id,
-                        fachid:doc.fachid,
-                        klassenid: doc.klassenid,
-                        thema: doc.thema,
-                        schuleid: doc.schuleid
+                        fehler: doc.fehler,
+                        korrekt: doc.korrekt,
+                        testid: doc.testid
                     }
                 })
             });
@@ -29,26 +28,23 @@ exports.lernstoff_get_all = (req, res, next) => {
         })
 };
 
-exports.lernstoff_create_lernstoff = (req, res, next) => {
-    const lernstoff = new Lernstoff({
+exports.testergebnis_create_testergebnis = (req, res, next) => {
+    const testergebnis = new Testergebnis({
         _id: new mongoose.Types.ObjectId(),
-        fachid: req.body.fachid,
-        klassenid: req.body.klassenid,
-        thema: req.body.thema,
-        schuleid: req.body.schuleid
+        fehler: req.body.fehler,
+        korrekt: req.body.korrekt,
+        testid: req.body.testid
     });
-    lernstoff
+    testergebnis
         .save()
         .then(result => {
             console.log(result);
             res.status(201).json({
-                message: 'Neuer Lernstoff',
-                erstellterLernstoff: {
-                    fachid: result.fachid,
-                    klassenid: result.klassenid,
-                    thema: result.thema,
-                    schuleid: result.schuleid
-
+                message: 'Der neue Testergebnis wurde hinzugefügt',
+                erstellteTestergebnis: {
+                    fehler: result.fehler,
+                    korrekt: result.korrekt,
+                    testid: result.testid
                 }
             });
         })
@@ -60,16 +56,16 @@ exports.lernstoff_create_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_get_lernstoff = (req, res, next) => {
-    const lernstoffId = req.params.lernstoffId;
-    Lernstoff.findById(lernstoffId)
-        .select('_id fachid klassenid thema schuleid')
+exports.testergebnis_get_testergebnis = (req, res, next) => {
+    const testergebnisId = req.params.testergebnisId;
+    Testergebnis.findById(testergebnisId)
+        .select('_id fehler korrekt testid')
         .exec()
         .then(doc => {
             console.log("Gefunden:", doc);
             if(doc) {
                 res.status(200).json({
-                    lernstoff: doc
+                    testergebnis: doc
                 });
             } else {
                 res.status(404).json({message: 'Keine ID gefunden!'});
@@ -82,13 +78,13 @@ exports.lernstoff_get_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_update_lernstoff = (req, res, next) => {
-    const id = req.params.lernstoffId;
+exports.testergebnis_update_testergebnis = (req, res, next) => {
+    const id = req.params.testergebnisId;
     const updateOps = {};
     for(const ops of req.body) {
         updateOps[ops.bspName] = ops.value;
     }
-    Lernstoff.update({_id: id}, { $set: updateOps })
+    Testergebnis.update({_id: id}, { $set: updateOps })
         .exec()
         .then(result => {
             console.log(result);
@@ -102,17 +98,17 @@ exports.lernstoff_update_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_delete = (req, res, next) => {
-    Lernstoff
-        .remove({ _id: req.params.lernstoffId })
+exports.testergebnis_delete = (req, res, next) => {
+    Testergebnis
+        .remove({ _id: req.params.testergebnisId })
         .exec()
         .then(result => {
             res.status(200).json({
-                message: 'Lernstoff weg bam!',
+                message: 'Testergebnis gelöscht!',
                 request: {
                     type:'POST',
-                    url: "http://localhost:3000/lernstoff/",
-                    body: {lernstoffId: 'ID'}
+                    url: "http://localhost:3000/testergebnis/",
+                    body: {testergebnisId: 'ID'}
                 }
             });
         })

@@ -1,23 +1,23 @@
 const mongoose = require('mongoose');
 
 // Schema - Tabelle.
-const Lernstoff = require('../models/lernstoff');
+const Test = require('../models/test');
 
-exports.lernstoff_get_all = (req, res, next) => {
-    Lernstoff
+exports.test_get_all = (req, res, next) => {
+    Test
         .find()
-        .select('_id fachid klassenid thema schuleid')
+        .select('_id aufgabeid zeit lehrerid schuelerid')
         .exec()
         .then(docs => {
             res.status(200).json({
                 Anzahl: docs.length,
-                Lernstoff: docs.map(doc => {
+                Test: docs.map(doc => {
                     return {
                         _id: doc._id,
-                        fachid:doc.fachid,
-                        klassenid: doc.klassenid,
-                        thema: doc.thema,
-                        schuleid: doc.schuleid
+                        aufgabeid: doc.aufgabeid,
+                        zeit: doc.zeit,
+                        lehrerid: doc.lehrerid,
+                        schuelerid:doc.schuelerid
                     }
                 })
             });
@@ -29,26 +29,25 @@ exports.lernstoff_get_all = (req, res, next) => {
         })
 };
 
-exports.lernstoff_create_lernstoff = (req, res, next) => {
-    const lernstoff = new Lernstoff({
+exports.test_create_test = (req, res, next) => {
+    const test = new Test({
         _id: new mongoose.Types.ObjectId(),
-        fachid: req.body.fachid,
-        klassenid: req.body.klassenid,
-        thema: req.body.thema,
-        schuleid: req.body.schuleid
+        aufgabeid: req.body.aufgabeid,
+        zeit: req.body.zeit,
+        lehrerid: req.body.lehrerid,
+        schuelerid: req.body.schuelerid
     });
-    lernstoff
+    test
         .save()
         .then(result => {
             console.log(result);
             res.status(201).json({
-                message: 'Neuer Lernstoff',
-                erstellterLernstoff: {
-                    fachid: result.fachid,
-                    klassenid: result.klassenid,
-                    thema: result.thema,
-                    schuleid: result.schuleid
-
+                message: 'Der neue Test wurde hinzugefügt',
+                erstellteTest: {
+                    aufgabeid: result.aufgabeid,
+                    zeit: result.zeit,
+                    lehrerid: result.lehrerid,
+                    schuelerid: result.schuelerid
                 }
             });
         })
@@ -60,16 +59,16 @@ exports.lernstoff_create_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_get_lernstoff = (req, res, next) => {
-    const lernstoffId = req.params.lernstoffId;
-    Lernstoff.findById(lernstoffId)
-        .select('_id fachid klassenid thema schuleid')
+exports.test_get_test = (req, res, next) => {
+    const testId = req.params.testId;
+    Test.findById(testId)
+        .select('_id aufgabeid zeit lehrerid schuelerid')
         .exec()
         .then(doc => {
             console.log("Gefunden:", doc);
             if(doc) {
                 res.status(200).json({
-                    lernstoff: doc
+                    test: doc
                 });
             } else {
                 res.status(404).json({message: 'Keine ID gefunden!'});
@@ -82,13 +81,13 @@ exports.lernstoff_get_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_update_lernstoff = (req, res, next) => {
-    const id = req.params.lernstoffId;
+exports.test_update_test = (req, res, next) => {
+    const id = req.params.testId;
     const updateOps = {};
     for(const ops of req.body) {
         updateOps[ops.bspName] = ops.value;
     }
-    Lernstoff.update({_id: id}, { $set: updateOps })
+    Test.update({_id: id}, { $set: updateOps })
         .exec()
         .then(result => {
             console.log(result);
@@ -102,17 +101,17 @@ exports.lernstoff_update_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_delete = (req, res, next) => {
-    Lernstoff
-        .remove({ _id: req.params.lernstoffId })
+exports.test_delete = (req, res, next) => {
+    Test
+        .remove({ _id: req.params.testId })
         .exec()
         .then(result => {
             res.status(200).json({
-                message: 'Lernstoff weg bam!',
+                message: 'Test gelöscht!',
                 request: {
                     type:'POST',
-                    url: "http://localhost:3000/lernstoff/",
-                    body: {lernstoffId: 'ID'}
+                    url: "http://localhost:3000/test/",
+                    body: {testId: 'ID'}
                 }
             });
         })

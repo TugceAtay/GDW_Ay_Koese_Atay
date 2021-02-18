@@ -1,23 +1,22 @@
 const mongoose = require('mongoose');
 
 // Schema - Tabelle.
-const Lernstoff = require('../models/lernstoff');
+const Loesungaufgabe = require('../models/loesungaufgabe');
 
-exports.lernstoff_get_all = (req, res, next) => {
-    Lernstoff
+exports.loesungaufgabe_get_all = (req, res, next) => {
+    Loesungaufgabe
         .find()
-        .select('_id fachid klassenid thema schuleid')
+        .select('_id aufgabeid testid testergebnisid')
         .exec()
         .then(docs => {
             res.status(200).json({
                 Anzahl: docs.length,
-                Lernstoff: docs.map(doc => {
+                Loesungaufgabe: docs.map(doc => {
                     return {
                         _id: doc._id,
-                        fachid:doc.fachid,
-                        klassenid: doc.klassenid,
-                        thema: doc.thema,
-                        schuleid: doc.schuleid
+                        aufgabeid:doc.aufgabeid,
+                        testid: doc.testid,
+                        testergebnisid: doc.testergebnisid
                     }
                 })
             });
@@ -29,25 +28,23 @@ exports.lernstoff_get_all = (req, res, next) => {
         })
 };
 
-exports.lernstoff_create_lernstoff = (req, res, next) => {
-    const lernstoff = new Lernstoff({
+exports.loesungaufgabe_create_loesungaufgabe = (req, res, next) => {
+    const loesungaufgabe = new Loesungaufgabe({
         _id: new mongoose.Types.ObjectId(),
-        fachid: req.body.fachid,
-        klassenid: req.body.klassenid,
-        thema: req.body.thema,
-        schuleid: req.body.schuleid
+        aufgabeid: req.body.aufgabeid,
+        testid: req.body.testid,
+        testergebnisid: req.body.testergebnisid
     });
-    lernstoff
+    loesungaufgabe
         .save()
         .then(result => {
             console.log(result);
             res.status(201).json({
-                message: 'Neuer Lernstoff',
-                erstellterLernstoff: {
-                    fachid: result.fachid,
-                    klassenid: result.klassenid,
-                    thema: result.thema,
-                    schuleid: result.schuleid
+                message: 'Neue Lösung',
+                erstellterLoesungaufgabe: {
+                    aufgabed: result.aufgabeid,
+                    testid: result.testid,
+                    testergebnisid: result.testergebnisid
 
                 }
             });
@@ -60,16 +57,16 @@ exports.lernstoff_create_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_get_lernstoff = (req, res, next) => {
-    const lernstoffId = req.params.lernstoffId;
-    Lernstoff.findById(lernstoffId)
-        .select('_id fachid klassenid thema schuleid')
+exports.loesungaufgabe_get_loesungaufgabe = (req, res, next) => {
+    const loesungaufgabeId = req.params.loesungaufgabeId;
+    Loesungaufgabe.findById(loesungaufgabeId)
+        .select('_id aufgabeid testid testergebnisid')
         .exec()
         .then(doc => {
             console.log("Gefunden:", doc);
             if(doc) {
                 res.status(200).json({
-                    lernstoff: doc
+                    loesungaufgabe: doc
                 });
             } else {
                 res.status(404).json({message: 'Keine ID gefunden!'});
@@ -82,13 +79,13 @@ exports.lernstoff_get_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_update_lernstoff = (req, res, next) => {
-    const id = req.params.lernstoffId;
+exports.loesungaufgabe_update_loesungaufgabe = (req, res, next) => {
+    const id = req.params.loesungaufgabeId;
     const updateOps = {};
     for(const ops of req.body) {
         updateOps[ops.bspName] = ops.value;
     }
-    Lernstoff.update({_id: id}, { $set: updateOps })
+    Loesungaufgabe.update({_id: id}, { $set: updateOps })
         .exec()
         .then(result => {
             console.log(result);
@@ -102,17 +99,17 @@ exports.lernstoff_update_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_delete = (req, res, next) => {
-    Lernstoff
-        .remove({ _id: req.params.lernstoffId })
+exports.loesungaufgabe_delete = (req, res, next) => {
+    Loesungaufgabe
+        .remove({ _id: req.params.loesungaufgabeId })
         .exec()
         .then(result => {
             res.status(200).json({
-                message: 'Lernstoff weg bam!',
+                message: 'Loesungaufgabe weg bam!',
                 request: {
                     type:'POST',
-                    url: "http://localhost:3000/lernstoff/",
-                    body: {lernstoffId: 'ID'}
+                    url: "http://localhost:3000/loesungaufgabe/",
+                    body: {loesungaufgabeId: 'ID'}
                 }
             });
         })

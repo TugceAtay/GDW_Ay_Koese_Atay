@@ -1,23 +1,22 @@
 const mongoose = require('mongoose');
 
 // Schema - Tabelle.
-const Lernstoff = require('../models/lernstoff');
+const Aufgabe = require('../models/aufgabe');
 
-exports.lernstoff_get_all = (req, res, next) => {
-    Lernstoff
+exports.aufgabe_get_all = (req, res, next) => {
+    Aufgabe
         .find()
-        .select('_id fachid klassenid thema schuleid')
+        .select('_id fachid klassenid thema')
         .exec()
         .then(docs => {
             res.status(200).json({
                 Anzahl: docs.length,
-                Lernstoff: docs.map(doc => {
+                Aufgabe: docs.map(doc => {
                     return {
                         _id: doc._id,
                         fachid:doc.fachid,
                         klassenid: doc.klassenid,
-                        thema: doc.thema,
-                        schuleid: doc.schuleid
+                        thema: doc.thema
                     }
                 })
             });
@@ -29,25 +28,23 @@ exports.lernstoff_get_all = (req, res, next) => {
         })
 };
 
-exports.lernstoff_create_lernstoff = (req, res, next) => {
-    const lernstoff = new Lernstoff({
+exports.aufgabe_create_aufgabe = (req, res, next) => {
+    const aufgabe = new Aufgabe({
         _id: new mongoose.Types.ObjectId(),
         fachid: req.body.fachid,
         klassenid: req.body.klassenid,
-        thema: req.body.thema,
-        schuleid: req.body.schuleid
+        thema: req.body.thema
     });
-    lernstoff
+    aufgabe
         .save()
         .then(result => {
             console.log(result);
             res.status(201).json({
-                message: 'Neuer Lernstoff',
-                erstellterLernstoff: {
+                message: 'Neue Aufgabe',
+                erstellterAufgabe: {
                     fachid: result.fachid,
                     klassenid: result.klassenid,
-                    thema: result.thema,
-                    schuleid: result.schuleid
+                    thema: result.thema
 
                 }
             });
@@ -60,16 +57,16 @@ exports.lernstoff_create_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_get_lernstoff = (req, res, next) => {
-    const lernstoffId = req.params.lernstoffId;
-    Lernstoff.findById(lernstoffId)
-        .select('_id fachid klassenid thema schuleid')
+exports.aufgabe_get_aufgabe = (req, res, next) => {
+    const aufgabeId = req.params.aufgabeId;
+    Aufgabe.findById(aufgabeId)
+        .select('_id fachid klassenid thema')
         .exec()
         .then(doc => {
             console.log("Gefunden:", doc);
             if(doc) {
                 res.status(200).json({
-                    lernstoff: doc
+                    aufgabe: doc
                 });
             } else {
                 res.status(404).json({message: 'Keine ID gefunden!'});
@@ -82,13 +79,13 @@ exports.lernstoff_get_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_update_lernstoff = (req, res, next) => {
-    const id = req.params.lernstoffId;
+exports.aufgabe_update_aufgabe = (req, res, next) => {
+    const id = req.params.aufgabeId;
     const updateOps = {};
     for(const ops of req.body) {
         updateOps[ops.bspName] = ops.value;
     }
-    Lernstoff.update({_id: id}, { $set: updateOps })
+    Aufgabe.update({_id: id}, { $set: updateOps })
         .exec()
         .then(result => {
             console.log(result);
@@ -102,17 +99,17 @@ exports.lernstoff_update_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_delete = (req, res, next) => {
-    Lernstoff
-        .remove({ _id: req.params.lernstoffId })
+exports.aufgabe_delete = (req, res, next) => {
+    Aufgabe
+        .remove({ _id: req.params.aufgabeId })
         .exec()
         .then(result => {
             res.status(200).json({
-                message: 'Lernstoff weg bam!',
+                message: 'Aufgabe weg bam!',
                 request: {
                     type:'POST',
-                    url: "http://localhost:3000/lernstoff/",
-                    body: {lernstoffId: 'ID'}
+                    url: "http://localhost:3000/aufgabe/",
+                    body: {aufgabeId: 'ID'}
                 }
             });
         })

@@ -6,7 +6,7 @@ const Schueler = require('../models/schueler');
 exports.schueler_get_all = (req, res, next) => {
     Schueler
         .find()
-        .select('_id vorname nachname plz fachid lehrerid klassenid')
+        .select('_id vorname nachname plz schuleid lehrerid klassenid')
         .exec()
         .then(docs => {
             res.status(200).json({
@@ -17,7 +17,7 @@ exports.schueler_get_all = (req, res, next) => {
                         vorname: doc.vorname,
                         nachname: doc.nachname,
                         plz: doc.plz,
-                        fachid: doc.fachid,
+                        schuleid: doc.schuleid,
                         lehrerid:doc.lehrerid,
                         klassenid: doc.klassenid
                     }
@@ -37,7 +37,7 @@ exports.schueler_create_schueler = (req, res, next) => {
         vorname: req.body.vorname,
         nachname: req.body.nachname,
         plz: req.body.plz,
-        fachid: req.body.fachid,
+        schuleid: req.body.schuleid,
         lehrerid: req.body.lehrerid,
         klassenid: req.body.klassenid
     });
@@ -51,7 +51,7 @@ exports.schueler_create_schueler = (req, res, next) => {
                     vorname: result.vorname,
                     nachname: result.nachname,
                     plz: result.plz,
-                    fachid: result.fachid,
+                    schuleid: result.schuleid,
                     lehrerid: result.lehrerid,
                     klassenid: result.klassenid
                 }
@@ -68,7 +68,7 @@ exports.schueler_create_schueler = (req, res, next) => {
 exports.schueler_get_schueler = (req, res, next) => {
     const schuelerId = req.params.schuelerId;
     Schueler.findById(schuelerId)
-        .select('_id vorname nachname plz fachid lehrerid klassenid')
+        .select('_id vorname nachname plz schuleid lehrerid klassenid')
         .exec()
         .then(doc => {
             console.log("Gefunden:", doc);

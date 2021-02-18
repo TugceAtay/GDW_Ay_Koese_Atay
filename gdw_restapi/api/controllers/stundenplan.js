@@ -1,23 +1,21 @@
 const mongoose = require('mongoose');
 
 // Schema - Tabelle.
-const Lernstoff = require('../models/lernstoff');
+const Stundenplan = require('../models/stundenplan');
 
-exports.lernstoff_get_all = (req, res, next) => {
-    Lernstoff
+exports.stundenplan_get_all = (req, res, next) => {
+    Stundenplan
         .find()
-        .select('_id fachid klassenid thema schuleid')
+        .select('_id fachid klassenid')
         .exec()
         .then(docs => {
             res.status(200).json({
                 Anzahl: docs.length,
-                Lernstoff: docs.map(doc => {
+                Stundenplan: docs.map(doc => {
                     return {
                         _id: doc._id,
-                        fachid:doc.fachid,
-                        klassenid: doc.klassenid,
-                        thema: doc.thema,
-                        schuleid: doc.schuleid
+                        fachid: doc.fachid,
+                        klassenid: doc.klassenid
                     }
                 })
             });
@@ -29,26 +27,21 @@ exports.lernstoff_get_all = (req, res, next) => {
         })
 };
 
-exports.lernstoff_create_lernstoff = (req, res, next) => {
-    const lernstoff = new Lernstoff({
+exports.stundenplan_create_stundenplan = (req, res, next) => {
+    const stundenplan = new Stundenplan ({
         _id: new mongoose.Types.ObjectId(),
         fachid: req.body.fachid,
-        klassenid: req.body.klassenid,
-        thema: req.body.thema,
-        schuleid: req.body.schuleid
+        klassenid: req.body.klassenid
     });
-    lernstoff
+    stundenplan
         .save()
         .then(result => {
             console.log(result);
             res.status(201).json({
-                message: 'Neuer Lernstoff',
-                erstellterLernstoff: {
+                message: 'Der neue Stundenplan ist drin',
+                angezeigterStundenplan: {
                     fachid: result.fachid,
-                    klassenid: result.klassenid,
-                    thema: result.thema,
-                    schuleid: result.schuleid
-
+                    klassenid: result.klassenid
                 }
             });
         })
@@ -60,16 +53,16 @@ exports.lernstoff_create_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_get_lernstoff = (req, res, next) => {
-    const lernstoffId = req.params.lernstoffId;
-    Lernstoff.findById(lernstoffId)
-        .select('_id fachid klassenid thema schuleid')
+exports.stundenplan_get_stundenplan = (req, res, next) => {
+    const stundenplanId = req.params.stundenplanId;
+    Stundenplan.findById(stundenplanId)
+        .select('_id fachid klassenid')
         .exec()
         .then(doc => {
             console.log("Gefunden:", doc);
             if(doc) {
                 res.status(200).json({
-                    lernstoff: doc
+                    stundenplan: doc
                 });
             } else {
                 res.status(404).json({message: 'Keine ID gefunden!'});
@@ -82,13 +75,13 @@ exports.lernstoff_get_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_update_lernstoff = (req, res, next) => {
-    const id = req.params.lernstoffId;
+exports.stundenplan_update_stundenplan = (req, res, next) => {
+    const id = req.params.stundenplanId;
     const updateOps = {};
     for(const ops of req.body) {
         updateOps[ops.bspName] = ops.value;
     }
-    Lernstoff.update({_id: id}, { $set: updateOps })
+    Stundenplan.update({_id: id}, { $set: updateOps })
         .exec()
         .then(result => {
             console.log(result);
@@ -102,17 +95,17 @@ exports.lernstoff_update_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_delete = (req, res, next) => {
-    Lernstoff
-        .remove({ _id: req.params.lernstoffId })
+exports.stundenplan_delete = (req, res, next) => {
+    Stundenplan
+        .remove({ _id: req.params.stundenplanId })
         .exec()
         .then(result => {
             res.status(200).json({
-                message: 'Lernstoff weg bam!',
+                message: 'Stundenplan gekillt!',
                 request: {
                     type:'POST',
-                    url: "http://localhost:3000/lernstoff/",
-                    body: {lernstoffId: 'ID'}
+                    url: "http://localhost:3000/stundenplan/",
+                    body: {stundenplanId: 'ID'}
                 }
             });
         })

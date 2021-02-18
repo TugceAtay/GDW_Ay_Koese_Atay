@@ -1,23 +1,22 @@
 const mongoose = require('mongoose');
 
 // Schema - Tabelle.
-const Lernstoff = require('../models/lernstoff');
+const Erziehungsberechtigter = require('../models/erziehungsberechtigter');
 
-exports.lernstoff_get_all = (req, res, next) => {
-    Lernstoff
+exports.erziehungsberechtigter_get_all = (req, res, next) => {
+    Erziehungsberechtigter
         .find()
-        .select('_id fachid klassenid thema schuleid')
+        .select('_id vorname nachname schuelerid')
         .exec()
         .then(docs => {
             res.status(200).json({
                 Anzahl: docs.length,
-                Lernstoff: docs.map(doc => {
+                Erziehungsberechtigter: docs.map(doc => {
                     return {
                         _id: doc._id,
-                        fachid:doc.fachid,
-                        klassenid: doc.klassenid,
-                        thema: doc.thema,
-                        schuleid: doc.schuleid
+                        vorname: doc.vorname,
+                        nachname: doc.nachname,
+                        schuelerid: doc.schuelerid
                     }
                 })
             });
@@ -29,26 +28,23 @@ exports.lernstoff_get_all = (req, res, next) => {
         })
 };
 
-exports.lernstoff_create_lernstoff = (req, res, next) => {
-    const lernstoff = new Lernstoff({
+exports.erziehungsberechtigter_create_erziehungsberechtigter = (req, res, next) => {
+    const erziehungsberechtigter = new Erziehungsberechtigter ({
         _id: new mongoose.Types.ObjectId(),
-        fachid: req.body.fachid,
-        klassenid: req.body.klassenid,
-        thema: req.body.thema,
-        schuleid: req.body.schuleid
+        vorname: req.body.vorname,
+        nachname: req.body.nachname,
+        schuelerid: req.body.schuelerid
     });
-    lernstoff
+    erziehungsberechtigter
         .save()
         .then(result => {
             console.log(result);
             res.status(201).json({
-                message: 'Neuer Lernstoff',
-                erstellterLernstoff: {
-                    fachid: result.fachid,
-                    klassenid: result.klassenid,
-                    thema: result.thema,
-                    schuleid: result.schuleid
-
+                message: 'Der neue Erziehungsberechtigter ist drin',
+                angezeigterErziehungsberechtigter: {
+                    vorname: result.vorname,
+                    nachname: result.nachname,
+                    schuelerid: result.schuelerid
                 }
             });
         })
@@ -60,16 +56,16 @@ exports.lernstoff_create_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_get_lernstoff = (req, res, next) => {
-    const lernstoffId = req.params.lernstoffId;
-    Lernstoff.findById(lernstoffId)
-        .select('_id fachid klassenid thema schuleid')
+exports.erziehungsberechtigter_get_erziehungsberechtigter = (req, res, next) => {
+    const erziehungsberechtigterId = req.params.erziehungsberechtigterId;
+    Erziehungsberechtigter.findById(erziehungsberechtigterId)
+        .select('_id vorname nachname schuelerid')
         .exec()
         .then(doc => {
             console.log("Gefunden:", doc);
             if(doc) {
                 res.status(200).json({
-                    lernstoff: doc
+                    erziehungsberechtigter: doc
                 });
             } else {
                 res.status(404).json({message: 'Keine ID gefunden!'});
@@ -82,13 +78,13 @@ exports.lernstoff_get_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_update_lernstoff = (req, res, next) => {
-    const id = req.params.lernstoffId;
+exports.erziehungsberechtigter_update_erziehungsberechtigter = (req, res, next) => {
+    const id = req.params.erziehungsberechtigterId;
     const updateOps = {};
     for(const ops of req.body) {
         updateOps[ops.bspName] = ops.value;
     }
-    Lernstoff.update({_id: id}, { $set: updateOps })
+    Erziehungsberechtigter.update({_id: id}, { $set: updateOps })
         .exec()
         .then(result => {
             console.log(result);
@@ -102,17 +98,17 @@ exports.lernstoff_update_lernstoff = (req, res, next) => {
         });
 };
 
-exports.lernstoff_delete = (req, res, next) => {
-    Lernstoff
-        .remove({ _id: req.params.lernstoffId })
+exports.erziehungsberechtigter_delete = (req, res, next) => {
+    Erziehungsberechtigter
+        .remove({ _id: req.params.erziehungsberechtigterId })
         .exec()
         .then(result => {
             res.status(200).json({
-                message: 'Lernstoff weg bam!',
+                message: 'Erziehungsberechtigter gekillt!',
                 request: {
                     type:'POST',
-                    url: "http://localhost:3000/lernstoff/",
-                    body: {lernstoffId: 'ID'}
+                    url: "http://localhost:3000/schueler/",
+                    body: {erziehungsberechtigterId: 'ID'}
                 }
             });
         })
